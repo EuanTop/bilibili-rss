@@ -1,0 +1,27 @@
+services:
+  bilibili-rss:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${BILIBILI_RSS_BIND:-127.0.0.1}:8765:8765"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      BILIBILI_RSS_HOST: 0.0.0.0
+      BILIBILI_RSS_PORT: 8765
+      BILIBILI_COOKIE_FILE: /run/secrets/bilibili.cookie
+      BILIBILI_DATA_DIR: /app/data
+    secrets:
+      - bilibili.cookie
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+secrets:
+  bilibili.cookie:
+    file: ./data/bilibili.cookie

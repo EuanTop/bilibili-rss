@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bilibili-rss-service"
+version = "0.4.0"
+description = "A small self-hosted RSS service for public Bilibili creator videos"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "EuanTop" }]
+keywords = ["bilibili", "rss", "feed", "self-hosted"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: FastAPI",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+]
+dependencies = [
+    "fastapi>=0.115.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.8.0",
+    "python-dotenv>=1.0.1",
+    "uvicorn[standard]>=0.30.0",
+]
+
+[project.scripts]
+bilibili-rss = "bilibili_rss_service.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.12.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.uv]
+package = true
+
+[tool.setuptools.packages.find]
+include = ["bilibili_rss_service*"]
+
+[tool.setuptools.package-data]
+bilibili_rss_service = ["static/*.xsl"]
